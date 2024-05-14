@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.models.DGIP import DegitalInputs, DegitalInput
+from app.models.DGIP import DigitalInputs
 from app.constants.http_responces import *
 
 degitalinput = APIRouter(tags=["Digital Input"])
@@ -22,8 +22,5 @@ class DigitalInputState(BaseModel):
     },
 )
 async def get_all_digital_input():
-    """Get status of all relays"""
-    all_dgip_status = {}
-    for dgip_id, dgip in DegitalInputs.items():
-        all_dgip_status[dgip_id] = dgip.Get_State()
-    return all_dgip_status
+    """Get all digital_input status"""
+    return {id: dgin for id, dgin in DigitalInputs.items()}
