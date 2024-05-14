@@ -7,7 +7,7 @@ relay_route = APIRouter(tags=["Relay"])
 
 
 @relay_route.get(
-    "/relay",
+    "/relays/{relay_id}",
     responses={
         200: {"model": ExampleResponseOK, "description": "Successful response"},
         404: {"model": ExampleResponseNotFound, "description": "Not Found"},
