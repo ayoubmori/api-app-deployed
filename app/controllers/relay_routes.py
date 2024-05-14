@@ -28,7 +28,7 @@ async def get_relay(relay_id: str):
 
 
 @relay_route.post(
-    "/relay/{relay_id}",
+    "/relays/{relay_id}",
     response_description="Successful Response",
     response_model=Relay,
     responses={
