@@ -1,15 +1,14 @@
-
 from pydantic import BaseModel
 
 
 class ExampleResponseOK(BaseModel):
-    id: str = "rela1"
+    id: str
     state: str = "OFF"
 
 
 class ExampleResponseBadRequest(BaseModel):
     status: int = 400
-    message: str = 'Bad Request'
+    message: str = "Bad Request"
 
 
 class ExampleResponseNotFound(BaseModel):

@@ -1,9 +1,13 @@
 from pydantic import BaseModel
-
+from typing import Dict
 
 class Relay(BaseModel):
     id: str
     state: str = "OFF"
+    
+class AllRelaysResponse(BaseModel):
+    relays: Dict[str, Relay]
+ 
 
 relays = {
     'relay1': Relay(id="relay1"),
