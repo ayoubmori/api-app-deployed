@@ -7,8 +7,3 @@ app = FastAPI(title="rest api")
 
 app.include_router(relay_route, prefix="/api")
 app.include_router(degitalinput, prefix="/api")
-
-
-@app.get("/")
-async def read_root():
-    return {"message": "navigate to https://rest-api-v3.onrender.com/docs "}
