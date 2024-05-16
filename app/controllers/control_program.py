@@ -3,17 +3,25 @@ from app.constants.http_responces import ExampleResponseServerError,ResponseOK
 from app.config.db import user
 from app.models.user import Program
 from bson import ObjectId
+from bson.errors import InvalidId
 
 
 
 control_prog= APIRouter(tags=["Control Program"])
 
-@control_prog.post('/programs')
+@control_prog.post('/programs',
+        responses={
+        200: {"model": ResponseOK
+              , "description": "Successful response"},
+        500: {
+            "model": ExampleResponseServerError,
+            "description": "Internal Server Error",
+        },
+    })
 async def add_program(program: Program):
     try:
         # Convert string "_id" to ObjectId
         program_dict = program.dict()
-        # program_dict["_id"] = ObjectId(program_dict["_id"]["$oid"])
         
         # Insert document into MongoDB collection
         result = user.insert_one(program_dict)
@@ -27,9 +35,10 @@ async def add_program(program: Program):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+    
 @control_prog.get(
     "/programs",
-                  responses={
+        responses={
         200: {"model": ResponseOK
               , "description": "Successful response"},
         500: {
@@ -53,9 +62,62 @@ async def get_all_programs():
         raise HTTPException(status_code=500, detail=str(e))
     
     
-@control_prog.delete("/programs")
+@control_prog.get(
+    "/programs/{program_id}",
+    summary="Get Program by id ",
+        responses={
+        200: {"model": ResponseOK
+              , "description": "Successful response"},
+        500: {
+            "model": ExampleResponseServerError,
+            "description": "Internal Server Error",
+        },
+    }
+)
+async def get_program(program_id: str):
+    try:
+        # Attempt to convert the program_id to ObjectId
+        program_id = ObjectId(program_id)
+    except InvalidId:
+        return {
+            'status_code': 400,
+            'message': 'Invalid program ID format'
+        }
+
+    program = user.find_one({"_id": program_id})
+    if program :
+        program["_id"] = str(program["_id"])
+        return program
+    else :
+        return {
+            'status_code':404,
+            'message': 'Program does not exist'}
+        
+    
+    
+    
+    
+@control_prog.delete(
+        "/programs/{program_id}",
+        summary="Delete Program by id ",
+        responses={
+        200: {"model": ResponseOK
+              , "description": "Successful response"},
+        500: {
+            "model": ExampleResponseServerError,
+            "description": "Internal Server Error",
+        },
+    }
+)
 async def delete_program(program_id: str):
-    program_id = ObjectId(program_id)
+    try:
+        # Attempt to convert the program_id to ObjectId
+        program_id = ObjectId(program_id)
+    except InvalidId:
+        return {
+            'status_code': 400,
+            'message': 'Invalid program ID format'
+        }
     # Query the collection for the document with the specified _id
     program = user.find_one({"_id": program_id})
     if program :
