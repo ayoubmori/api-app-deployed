@@ -9,7 +9,7 @@ from bson.errors import InvalidId
 
 control_prog= APIRouter(tags=["Control Program"])
 
-@control_prog.post('/programs',
+@control_prog.post('/control-program',
         responses={
         200: {"model": ResponseOK
               , "description": "Successful response"},
@@ -37,7 +37,7 @@ async def add_program(program: Program):
     
     
 @control_prog.get(
-    "/programs",
+    "/control-program",
         responses={
         200: {"model": ResponseOK
               , "description": "Successful response"},
@@ -63,7 +63,7 @@ async def get_all_programs():
     
     
 @control_prog.get(
-    "/programs/{program_id}",
+    "/control-program/{id}",
     summary="Get Program by id ",
         responses={
         200: {"model": ResponseOK
@@ -98,7 +98,7 @@ async def get_program(program_id: str):
     
     
 @control_prog.delete(
-        "/programs/{program_id}",
+        "/control-program/{id}",
         summary="Delete Program by id ",
         responses={
         200: {"model": ResponseOK
